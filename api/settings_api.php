@@ -2,6 +2,7 @@
 include "../auth/connect.php";
 
 $conn = connect();
+
 function validateToken($token)
 {
     $decodedToken = base64_decode($token);
@@ -32,14 +33,19 @@ if (!validateToken($token)) {
     exit;
 }
 
-$sql = "SELECT * FROM settings";
+$sql = "SELECT * FROM settings WHERE id=1";
 $result = $conn->query($sql);
 
 if (mysqli_num_rows($result) > 0) {
-    $data = $result->fetch_all(MYSQLI_ASSOC);
+    $row = $result->fetch_assoc(); 
 
     header('Content-type: application/json');
-    echo json_encode($data);
+    echo json_encode($row);  // Directly return the single object
 } else {
     echo json_encode(["message" => "No Data found"]);
 }
+
+$conn->close();
+
+
+//QXV0aG9yaXphdGlvbiBoZWFkZXIgbm90IGZvdW5k
